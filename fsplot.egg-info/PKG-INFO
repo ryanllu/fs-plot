@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: fsplot
-Version: 0.1
+Version: 0.2
 Summary: `fsplot` is a Python library for lightweight visualization of financial market data using SVG.
 Home-page: https://github.com/ryanllu/fs-plot
 Author: Ryan L.
@@ -14,7 +14,7 @@ License-File: LICENSE
 Requires-Dist: svgwrite>=1.4.1
 Requires-Dist: numpy>=1.21.0
 
-# Trendline
+# fs-plot
 
 `fsplot` is a Python library for lightweight visualization of financial market data using SVG. It provides functions to generate SVG charts, making it ideal for web and mobile applications that require efficient and compact chart rendering.
 
@@ -27,68 +27,112 @@ pip install fsplot
 ```
 
 ## Use Case
-`fsplot` is good for scenarios where you need SVG or lightweight chart visualization for financial market data in web or mobile applications. Its efficient rendering ensures that your charts are fast and responsive, making it suitable for real-time and static data presentations.
-
+`fsplot` is good for scenarios where you need SVG or lightweight chart visualization for static financial market data in web or mobile applications. Using SVG instead of a data visualization library will result in a chart that is extremely lightweight in both rendering and file size.
 
 ## Example Use
 
 Here are some examples of how to use fsplot:
+
+### Fetching Example Data
+
+```python
+import pandas as pd
+import yfinance as yf
+
+# Set the start and end dates
+start_date = "2024-01-01"
+end_date = "2024-09-01"
+
+# Fetch Bitcoin data from Yahoo Finance
+bitcoin = yf.download('BTC-USD', start=start_date, end=end_date)
+
+# Ensure that the index is a DatetimeIndex
+bitcoin.index = pd.to_datetime(bitcoin.index)
+
+# Resample the data to a 2-day frequency and aggregate OHLC values
+bitcoin = bitcoin.resample('3D').agg({
+    'Open': 'first',
+    'High': 'max',
+    'Low': 'min',
+    'Close': 'last'
+})[-60:]
+```
 
 ### Plotting a Line Chart
 
 ```python
 from fsplot import plot_line
 
-import pandas as pd
+# Prepare data for plotting
+data = bitcoin["Close"][-60:]
 
-# Sample DataFrame
-data =  [1,4,9,16,25,36,49,64,81,100,121,144,169,,196,225]
+# Generate and display the candlestick plot
+svg = plot_line(data)
 
-# Generate SVG for line chart
-svg_string = plot_line(data, width=150, height=100)
-print(svg_string)
-
+with open("line.svg", "w") as file:
+    file.write(svg)
 ```
+
+Output:
+
+![Line Plot](images/line.svg)
+
 
 ### Plotting a Candlestick Chart
 
 ```python
 from fsplot import plot_candlestick
 
+# Prepare data for plotting
 data = {
-    'Open': [100, 105, 102, 108, 110, 107, 111],
-    'High': [105, 108, 105, 112, 115, 110, 115],
-    'Low': [95, 100, 98, 105, 108, 102, 108],
-    'Close': [103, 106, 104, 110, 112, 105, 113],
+    "Open": bitcoin["Open"],
+    "High": bitcoin["High"],
+    "Low": bitcoin["Low"],
+    "Close": bitcoin["Close"]
 }
 
-# Generate SVG for candlestick chart with trendlines
-svg_string = plot_candlestick(data, width=100, height=60)
-print(svg_string)
+# Generate and display the candlestick plot
+svg = plot_candlestick(data)
 
-
+with open("candlestick.svg", "w") as file:
+    file.write(svg)
 ```
+
+Output:
+
+![Candlestick Plot](images/candlestick.svg)
+
 
 ### Plotting a Candlestick Chart with Trendline
 
 ```python
+from trendline import calculate_trendline
 from fsplot import plot_candlestick_trendline
 
+# Calculate trendline
+trend_line = calculate_trendline(bitcoin)
+
+
+# Prepare data for plotting
 data = {
-    'Open': [100, 105, 102, 108, 110, 107, 111],
-    'High': [105, 108, 105, 112, 115, 110, 115],
-    'Low': [95, 100, 98, 105, 108, 102, 108],
-    'Close': [103, 106, 104, 110, 112, 105, 113],
-    'support_first_value': 100,
-    'support_last_value': 105,
-    'support_gradient': 0.1,
-    'resistance_first_value': 115,
-    'resistance_last_value': 110,
-    'resistance_gradient': -0.05
+    "Open": bitcoin["Open"],
+    "High": bitcoin["High"],
+    "Low": bitcoin["Low"],
+    "Close": bitcoin["Close"],
+    "support_first_value": trend_line["support_first_value"],
+    "support_gradient": trend_line["support_gradient"],
+    "resistance_first_value": trend_line["resistance_first_value"],
+    "resistance_gradient": trend_line["resistance_gradient"]
 }
 
-# Generate SVG for candlestick chart with trendlines
-svg_string = plot_candlestick_trendline(data, width=100, height=60)
-print(svg_string)
+# Generate and display the candlestick plot
+svg = plot_candlestick_trendline(data)
 
+with open("candlestick_trendline.svg", "w") as file:
+    file.write(svg)
 ```
+
+Output:
+
+![Candlestick Plot with Trendline](images/candlestick_trendline.svg)
+

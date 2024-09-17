@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='fsplot',
-    version='0.1',
+    version='0.2',
     description='`fsplot` is a Python library for lightweight visualization of financial market data using SVG.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
