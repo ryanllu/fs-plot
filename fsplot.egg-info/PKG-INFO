@@ -1,0 +1,94 @@
+Metadata-Version: 2.1
+Name: fsplot
+Version: 0.1
+Summary: `fsplot` is a Python library for lightweight visualization of financial market data using SVG.
+Home-page: https://github.com/ryanllu/fs-plot
+Author: Ryan L.
+Author-email: rylu.lubis@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: svgwrite>=1.4.1
+Requires-Dist: numpy>=1.21.0
+
+# Trendline
+
+`fsplot` is a Python library for lightweight visualization of financial market data using SVG. It provides functions to generate SVG charts, making it ideal for web and mobile applications that require efficient and compact chart rendering.
+
+## Installation
+
+To install `fsplot`, you can use pip. Run the following command:
+
+```bash
+pip install fsplot
+```
+
+## Use Case
+`fsplot` is good for scenarios where you need SVG or lightweight chart visualization for financial market data in web or mobile applications. Its efficient rendering ensures that your charts are fast and responsive, making it suitable for real-time and static data presentations.
+
+
+## Example Use
+
+Here are some examples of how to use fsplot:
+
+### Plotting a Line Chart
+
+```python
+from fsplot import plot_line
+
+import pandas as pd
+
+# Sample DataFrame
+data =  [1,4,9,16,25,36,49,64,81,100,121,144,169,,196,225]
+
+# Generate SVG for line chart
+svg_string = plot_line(data, width=150, height=100)
+print(svg_string)
+
+```
+
+### Plotting a Candlestick Chart
+
+```python
+from fsplot import plot_candlestick
+
+data = {
+    'Open': [100, 105, 102, 108, 110, 107, 111],
+    'High': [105, 108, 105, 112, 115, 110, 115],
+    'Low': [95, 100, 98, 105, 108, 102, 108],
+    'Close': [103, 106, 104, 110, 112, 105, 113],
+}
+
+# Generate SVG for candlestick chart with trendlines
+svg_string = plot_candlestick(data, width=100, height=60)
+print(svg_string)
+
+
+```
+
+### Plotting a Candlestick Chart with Trendline
+
+```python
+from fsplot import plot_candlestick_trendline
+
+data = {
+    'Open': [100, 105, 102, 108, 110, 107, 111],
+    'High': [105, 108, 105, 112, 115, 110, 115],
+    'Low': [95, 100, 98, 105, 108, 102, 108],
+    'Close': [103, 106, 104, 110, 112, 105, 113],
+    'support_first_value': 100,
+    'support_last_value': 105,
+    'support_gradient': 0.1,
+    'resistance_first_value': 115,
+    'resistance_last_value': 110,
+    'resistance_gradient': -0.05
+}
+
+# Generate SVG for candlestick chart with trendlines
+svg_string = plot_candlestick_trendline(data, width=100, height=60)
+print(svg_string)
+
+```
