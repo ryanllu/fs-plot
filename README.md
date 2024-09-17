@@ -11,8 +11,7 @@ pip install fsplot
 ```
 
 ## Use Case
-`fsplot` is good for scenarios where you need SVG or lightweight chart visualization for financial market data in web or mobile applications. Its efficient rendering ensures that your charts are fast and responsive, making it suitable for real-time and static data presentations.
-
+`fsplot` is good for scenarios where you need SVG or lightweight chart visualization for static financial market data in web or mobile applications. Using SVG instead of a data visualization library will result in a chart that is extremely lightweight in both rendering and file size.
 
 ## Example Use
 
