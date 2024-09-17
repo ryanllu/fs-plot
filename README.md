@@ -1,4 +1,4 @@
-# Trendline
+# fs-plot
 
 `fsplot` is a Python library for lightweight visualization of financial market data using SVG. It provides functions to generate SVG charts, making it ideal for web and mobile applications that require efficient and compact chart rendering.
 
